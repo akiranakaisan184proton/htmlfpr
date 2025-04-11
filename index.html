@@ -232,6 +232,45 @@
             color: #333;
             font-size: 12px;
         }
+        
+        /* Novo estilo para a seção de foto da infração */
+        .infraction-photo-section {
+            margin: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .infraction-photo-header {
+            background-color: #f8f8f8;
+            padding: 12px 15px;
+            font-weight: bold;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .infraction-photo-container {
+            width: 100%;
+            height: 250px;
+            background-color: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .infraction-photo-container img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        
+        .infraction-details {
+            padding: 12px 15px;
+            font-size: 14px;
+            color: #555;
+            border-top: 1px solid #eee;
+        }
     </style>
 </head>
 <body>
@@ -255,6 +294,22 @@
             <div class="info-row">
                 <div class="info-label">RENAVAM</div>
                 <div class="info-value">01374128730</div>
+            </div>
+        </div>
+        
+        <!-- Nova seção para a foto da infração -->
+        <div class="infraction-photo-section">
+            <div class="infraction-photo-header">
+                Foto da Infração
+            </div>
+            <div class="infraction-photo-container">
+                <!-- Aqui você pode inserir a imagem real da infração -->
+                <img src="/placeholder.svg?height=200&width=300" alt="Foto da Infração">
+            </div>
+            <div class="infraction-details">
+                <p><strong>Local:</strong> BR-101, Km 432</p>
+                <p><strong>Data/Hora:</strong> 10/04/2025 às 14:35</p>
+                <p><strong>Infração:</strong> Excesso de velocidade - 20% acima do permitido</p>
             </div>
         </div>
         
