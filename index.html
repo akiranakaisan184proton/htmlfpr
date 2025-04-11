@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>PRF - Pagamento</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        
+        body {
+            background-color: #f0f0f0;
+            font-size: 16px;
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+        
+        .header {
+            background-color: #1a1a60;
+            color: white;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .logo {
+            font-weight: bold;
+            font-size: 22px;
+            color: #ffd700;
+            margin-right: 10px;
+        }
+        
+        .app-name {
+            font-size: 18px;
+        }
+        
+        .container {
+            width: 100%;
+            background-color: white;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            min-height: calc(100vh - 110px);
+        }
+        
+        .search-bar {
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            align-items: center;
+            font-size: 16px;
+        }
+        
+        .search-icon {
+            margin-right: 10px;
+            font-size: 18px;
+        }
+        
+        .info-section {
+            background-color: #e6f7ff;
+            padding: 15px;
+            margin: 10px;
+            border-radius: 5px;
+        }
+        
+        .info-row {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 15px;
+        }
+        
+        .info-label {
+            font-weight: bold;
+            color: #555;
+            margin-bottom: 5px;
+        }
+        
+        .info-value {
+            background-color: #f0f0f0;
+            padding: 12px;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        
+        .action-button {
+            background-color: #0099cc;
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 15px;
+            width: calc(100% - 30px);
+            font-size: 16px;
+            text-align: center;
+        }
+        
+        .action-text {
+            margin: 15px;
+            display: block;
+            font-size: 15px;
+            line-height: 1.4;
+        }
+        
+        .blue-link {
+            color: #0099cc;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        
+        .payment-card {
+            margin: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .payment-header {
+            background-color: #f8f8f8;
+            padding: 12px 15px;
+            font-weight: bold;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .payment-body {
+            padding: 15px;
+        }
+        
+        .payment-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .payment-label {
+            color: #666;
+        }
+        
+        .payment-value {
+            font-weight: bold;
+        }
+        
+        .payment-value.highlight {
+            color: #0099cc;
+        }
+        
+        .payment-status {
+            margin-top: 15px;
+            padding: 8px 12px;
+            background-color: #fff3cd;
+            color: #856404;
+            border-radius: 4px;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .pix-section {
+            margin: 20px 15px;
+            padding: 20px 15px;
+            border: 2px solid #0099cc;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .pix-section h2 {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .pix-section p {
+            font-size: 14px;
+            margin-bottom: 15px;
+            color: #666;
+        }
+        
+        .pix-qrcode {
+            width: 200px;
+            height: 200px;
+            margin: 20px auto;
+            background-color: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #555;
+            border: 1px solid #ddd;
+        }
+        
+        .pix-key {
+            padding: 15px;
+            background-color: #f8f8f8;
+            border: 1px dashed #ccc;
+            margin: 15px auto;
+            font-family: monospace;
+            font-size: 14px;
+            word-break: break-all;
+            text-align: left;
+        }
+        
+        .copy-button {
+            background-color: #0099cc;
+            color: white;
+            border: none;
+            padding: 14px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
+            width: 100%;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        
+        .footer {
+            background-color: #ffd700;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            position: sticky;
+            bottom: 0;
+        }
+        
+        .version {
+            color: #333;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">PRF</div>
+        <div class="app-name">Pagamentos</div>
+    </div>
+    
+    <div class="container">
+        <div class="info-section">
+            <div class="info-row">
+                <div class="info-label">PLACA</div>
+                <div class="info-value">FPU9C81</div>
+            </div>
+            
+            <div class="info-row">
+                <div class="info-label">Tipo de Serviço</div>
+                <div class="info-value">Pagamento de Multa</div>
+            </div>
+            
+            <div class="info-row">
+                <div class="info-label">RENAVAM</div>
+                <div class="info-value">01374128730</div>
+            </div>
+        </div>
+        
+        <div class="payment-card">
+            <div class="payment-header">
+                Detalhes do Pagamento
+            </div>
+            <div class="payment-body">
+                <div class="payment-row">
+                    <div class="payment-label">Nº Referência:</div>
+                    <div class="payment-value">2023001</div>
+                </div>
+                <div class="payment-row">
+                    <div class="payment-label">Descrição:</div>
+                    <div class="payment-value">Taxa de Serviço</div>
+                </div>
+                <div class="payment-row">
+                    <div class="payment-label">Data Emissão:</div>
+                    <div class="payment-value">11/04/2025</div>
+                </div>
+                <div class="payment-row">
+                    <div class="payment-label">Vencimento:</div>
+                    <div class="payment-value">12/04/2023</div>
+                </div>
+                <div class="payment-row">
+                    <div class="payment-label">Valor:</div>
+                    <div class="payment-value highlight">R$ 157,98</div>
+                </div>
+                <div class="payment-status">
+                    Pendente
+                </div>
+            </div>
+        </div>
+        
+        <div class="pix-section">
+            <h2>Pagamento via PIX</h2>
+            <h3 style="margin-top: 20px; font-size: 16px;">Copie a chave PIX:</h3>
+            <div class="pix-key">
+                00020126580014BR.GOV.BCB.PIX0136123e4567-e89b-12d3-a456-426655440000520400005303986540510.005802BR5913Sistema Pag.6008Brasilia62070503***63041234
+            </div>
+            
+            <button class="copy-button">Copiar Chave PIX</button>
+            
+            <p style="margin-top: 20px; color: #555; font-size: 14px;">
+                Após o pagamento, o sistema atualizará automaticamente em até 5 minutos.
+            </p>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <div>PRF Pagamentos</div>
+        <div class="version">versão 1.1.0</div>
+    </div>
+
+    <script>
+        document.querySelector('.copy-button').addEventListener('click', function() {
+            const pixKey = document.querySelector('.pix-key').textContent.trim();
+            navigator.clipboard.writeText(pixKey).then(function() {
+                alert('Chave PIX copiada com sucesso!');
+            }).catch(function() {
+                alert('Erro ao copiar. Por favor, copie manualmente.');
+            });
+        });
+    </script>
+</body>
+</html>
